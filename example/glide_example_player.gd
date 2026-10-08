@@ -23,7 +23,7 @@ func _process(delta: float) -> void:
 		# Latch the target pixel once, ahead of the direction of travel, so the
 		# glide can never pull the player backwards.
 		_settling = true
-		_settle_pixel = Vector2(_pixel_ahead(position.x, velocity.x), _pixel_ahead(position.y, velocity.y))
+		_settle_pixel = PixelPerfectView.pixel_ahead(position, velocity)
 		velocity = Vector2.ZERO
 
 	if _settling:
@@ -34,15 +34,6 @@ func _process(delta: float) -> void:
 
 	velocity = velocity.move_toward(input * max_speed, acceleration * delta)
 	position += velocity * delta
-
-
-## Nearest whole pixel in the direction of `v`; plain rounding when not moving.
-func _pixel_ahead(p: float, v: float) -> float:
-	if v > 0.0:
-		return ceilf(p)
-	if v < 0.0:
-		return floorf(p)
-	return roundf(p)
 
 
 func _draw() -> void:

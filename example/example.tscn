@@ -1,17 +1,11 @@
 [gd_scene format=3 uid="uid://bftkiipxdhexw"]
 
-[ext_resource type="Script" uid="uid://ckmdrrqmudf3d" path="res://common/pixel_perfect_view/pixel_perfect_view.gd" id="1_view"]
+[ext_resource type="Script" uid="uid://bjvcbbccq13b3" path="res://common/pixel_perfect_view/pixel_perfect_view.gd" id="1_view"]
 [ext_resource type="PackedScene" uid="uid://cm5gww33hio71" path="res://stages/testing/terrain/terrain.tscn" id="2_2p3ih"]
 
 [node name="View" type="SubViewportContainer" unique_id=2098867633]
 script = ExtResource("1_view")
 
 [node name="Game" type="SubViewport" parent="." unique_id=1603873806]
-handle_input_locally = false
-snap_2d_transforms_to_pixel = true
-snap_2d_vertices_to_pixel = true
-canvas_item_default_texture_filter = 0
-size = Vector2i(2, 2)
-render_target_update_mode = 4
 
 [node name="Root" parent="Game" unique_id=534260253 instance=ExtResource("2_2p3ih")]

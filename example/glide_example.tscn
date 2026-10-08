@@ -1,13 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://common/pixel_perfect_view/example/glide_example.gd" id="1_root"]
-[ext_resource type="Script" uid="uid://ckmdrrqmudf3d" path="res://common/pixel_perfect_view/pixel_perfect_view.gd" id="2_view"]
+[ext_resource type="Script" uid="uid://bjvcbbccq13b3" path="res://common/pixel_perfect_view/pixel_perfect_view.gd" id="2_view"]
 [ext_resource type="Script" path="res://common/pixel_perfect_view/example/glide_example_ground.gd" id="3_ground"]
 [ext_resource type="Script" path="res://common/pixel_perfect_view/example/glide_example_player.gd" id="4_player"]
-[ext_resource type="Script" uid="uid://w2r45xockjtr" path="res://common/pixel_perfect_view/pixel_perfect_camera_2d.gd" id="5_camera"]
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_glide"]
-blend_mode = 4
+[ext_resource type="Script" uid="uid://cglsw8vcpllj0" path="res://common/pixel_perfect_view/pixel_perfect_camera_2d.gd" id="5_camera"]
 
 [node name="GlideExample" type="Control"]
 layout_mode = 3
@@ -19,54 +16,25 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_root")
 
-[node name="View" type="SubViewportContainer" parent="." node_paths=PackedStringArray("glide_view")]
-layout_mode = 0
-stretch = true
+[node name="View" type="SubViewportContainer" parent="."]
 script = ExtResource("2_view")
 target_size = Vector2i(360, 200)
-zoom_camera = false
-glide_view = NodePath("../GlideView")
+snap_to_art_pixels = true
+glide_target = true
 
 [node name="Game" type="SubViewport" parent="View"]
-handle_input_locally = false
-snap_2d_transforms_to_pixel = true
-snap_2d_vertices_to_pixel = true
-canvas_item_default_texture_filter = 0
-canvas_cull_mask = 4294967293
-size = Vector2i(2, 2)
-render_target_update_mode = 4
 
 [node name="World" type="Node2D" parent="View/Game"]
-visibility_layer = 3
 
 [node name="Ground" type="Node2D" parent="View/Game/World"]
 script = ExtResource("3_ground")
 
 [node name="Player" type="Node2D" parent="View/Game/World"]
-physics_interpolation_mode = 2
-visibility_layer = 2
 script = ExtResource("4_player")
 
 [node name="Camera" type="Camera2D" parent="View/Game/World/Player" node_paths=PackedStringArray("target")]
 script = ExtResource("5_camera")
 target = NodePath("..")
-
-[node name="GlideView" type="SubViewportContainer" parent="."]
-material = SubResource("CanvasItemMaterial_glide")
-layout_mode = 0
-mouse_filter = 2
-stretch = true
-script = ExtResource("2_view")
-
-[node name="Glide" type="SubViewport" parent="GlideView"]
-transparent_bg = true
-handle_input_locally = false
-snap_2d_transforms_to_pixel = true
-snap_2d_vertices_to_pixel = true
-canvas_item_default_texture_filter = 0
-canvas_cull_mask = 2
-size = Vector2i(2, 2)
-render_target_update_mode = 4
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
