@@ -11,16 +11,38 @@ extends Node2D
 
 var velocity := Vector2.ZERO
 
+var _settling := false
+var _settle_pixel := Vector2.ZERO
+
 
 func _process(delta: float) -> void:
 	var input := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	if input != Vector2.ZERO:
+		_settling = false
+	elif not _settling and velocity.length() < settle_below_speed:
+		# Latch the target pixel once, ahead of the direction of travel, so the
+		# glide can never pull the player backwards.
+		_settling = true
+		_settle_pixel = Vector2(_pixel_ahead(position.x, velocity.x), _pixel_ahead(position.y, velocity.y))
+		velocity = Vector2.ZERO
+
+	if _settling:
+		position = position.lerp(_settle_pixel, 1.0 - exp(-settle_speed * delta))
+		if position.distance_to(_settle_pixel) < 0.01:
+			position = _settle_pixel
+		return
+
 	velocity = velocity.move_toward(input * max_speed, acceleration * delta)
 	position += velocity * delta
-	if input == Vector2.ZERO and velocity.length() < settle_below_speed:
-		var pixel := position.round()
-		position = position.lerp(pixel, 1.0 - exp(-settle_speed * delta))
-		if position.distance_to(pixel) < 0.01:
-			position = pixel
+
+
+## Nearest whole pixel in the direction of `v`; plain rounding when not moving.
+func _pixel_ahead(p: float, v: float) -> float:
+	if v > 0.0:
+		return ceilf(p)
+	if v < 0.0:
+		return floorf(p)
+	return roundf(p)
 
 
 func _draw() -> void:
